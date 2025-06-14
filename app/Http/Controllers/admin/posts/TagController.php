@@ -3,7 +3,9 @@
 namespace App\Http\Controllers\admin\posts;
 
 use App\Http\Controllers\Controller;
+use App\Models\Tag;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class TagController extends Controller
 {
@@ -12,7 +14,8 @@ class TagController extends Controller
      */
     public function index()
     {
-        //
+        $tags = Tag::paginate(10);
+        return view('tags.index', ['tags' => $tags]);
     }
 
     /**
@@ -20,7 +23,7 @@ class TagController extends Controller
      */
     public function create()
     {
-        //
+        return view('tags.create');
     }
 
     /**
@@ -28,7 +31,19 @@ class TagController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validator = Validator::make($request->all(), [
+            'name' => 'required|max:255',
+            'description' => 'nullable'
+        ]);
+
+        if ($validator->fails()) {
+            return redirect()->back()
+                ->withErrors($validator)
+                ->withInput();
+        }
+
+        Tag::create($request->all());
+        return back()->with('success', 'Tag created!');
     }
 
     /**
@@ -44,7 +59,8 @@ class TagController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        $tag = Tag::findOrFail($id);
+        return view('tags.edit', ['tag' => $tag]);
     }
 
     /**
@@ -52,7 +68,9 @@ class TagController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+
+        Tag::findOrFail($id)->update($request->all());
+        return back()->with('success', 'Tag update!');
     }
 
     /**
@@ -60,6 +78,7 @@ class TagController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        Tag::findOrFail($id)->delete();
+        return back()->with('success', 'Tag deleted!');
     }
 }
