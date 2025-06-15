@@ -40,11 +40,13 @@
                     </div>
 
                     <div class="mt-6 flex justify-end gap-3">
+                        @can('update-post', $post)
                         <a href="{{ route('posts.edit', $post->id) }}"
                             class="bg-yellow-500 text-white px-4 py-2 rounded hover:bg-yellow-600 text-sm">
                             Edit
                         </a>
-
+                        @endcan
+                        @can('delete-post', $post)
                         <form action="{{ route('posts.destroy', $post->id) }}" method="POST"
                             onsubmit="return confirm('Are you sure you want to delete this post?')">
                             @csrf
@@ -53,6 +55,7 @@
                                 Delete
                             </button>
                         </form>
+                        @endcan
                     </div>
                 </div>
             </div>

@@ -54,10 +54,13 @@
                                     class="text-white bg-blue-600 px-3 py-1 rounded hover:bg-blue-700 text-sm">
                                     View
                                 </a>
+                                @can('update-post', $post)
                                 <a href="{{ route('posts.edit', $post->id) }}"
                                     class="text-white bg-yellow-500 px-3 py-1 rounded hover:bg-yellow-600 text-sm">
                                     Edit
                                 </a>
+                                @endcan
+                                @can('delete-post', $post)
                                 <form action="{{ route('posts.destroy', $post->id) }}" method="POST"
                                     onsubmit="return confirm('Are you sure?')">
                                     @csrf
@@ -67,6 +70,7 @@
                                         Delete
                                     </button>
                                 </form>
+                                @endcan
                             </div>
                         </div>
 

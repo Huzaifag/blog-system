@@ -7,6 +7,7 @@ use App\Models\Category;
 use App\Models\Post;
 use App\Models\Tag;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 
 class PostController extends Controller
 {
@@ -85,8 +86,8 @@ class PostController extends Controller
         $post = Post::with(['category', 'tags', 'user'])
             ->where('id', $id)
             ->firstOrFail();
+        abort_unless(Gate::allows('update-post', $post), 403);
         return view('posts.edit', compact('post','categories', 'tags'));
-
     }
 
     /**
@@ -110,6 +111,7 @@ class PostController extends Controller
         }
 
         $post = Post::findOrFail($id);
+        abort_unless(Gate::allows('update-post', $post), 403);
         $post->update($validated);
         $post->tags()->sync($validated['tags']);
 
@@ -124,7 +126,7 @@ class PostController extends Controller
     public function destroy(string $id)
     {
         $post = Post::findOrFail($id);
-
+        abort_unless(Gate::allows('delete-post', $post), 403);
         $post->tags()->detach();
         $post->delete();
 
