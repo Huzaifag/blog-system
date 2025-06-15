@@ -1,3 +1,15 @@
+@php
+    use App\Models\Post;
+    use App\Models\Tag;
+    use App\Models\Category;
+    $tagsCount = Tag::count();
+    $categoriesCount = Category::count();
+    $postsCount = Post::count();
+    $recentPosts = $posts = Post::latest()
+            ->with(['category', 'tags', 'user'])
+            ->paginate(9);
+@endphp
+
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
@@ -20,8 +32,8 @@
                             <div class="text-gray-700">Categories</div>
                         </div>
                         <div class="bg-yellow-100 p-4 rounded shadow">
-                            <div class="text-2xl font-semibold">{{ $commentsCount ?? 0 }}</div>
-                            <div class="text-gray-700">Comments</div>
+                            <div class="text-2xl font-semibold">{{ $tagsCount ?? 0 }}</div>
+                            <div class="text-gray-700">Tags</div>
                         </div>
                     </div>
                     <a href="{{route('posts.create')}}" class="inline-block bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition">
