@@ -3,6 +3,7 @@
 use App\Http\Controllers\admin\posts\CategoryController;
 use App\Http\Controllers\admin\posts\PostController;
 use App\Http\Controllers\admin\posts\TagController;
+use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
@@ -23,5 +24,7 @@ Route::middleware('auth')->group(function () {
     Route::resource('categories', CategoryController::class);
     Route::resource('tags', TagController::class);
 });
+
+Route::get('/invoice', [InvoiceController::class, 'index']);
 
 require __DIR__.'/auth.php';
